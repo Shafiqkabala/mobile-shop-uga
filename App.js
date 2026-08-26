@@ -1,17 +1,42 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
   StyleSheet,
   FlatList,
-  Pressable,
-  TextInput,
   Image,
+  TextInput,
+  Pressable,
   SafeAreaView,
   Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
+
+/*
+====================================================
+MOBILE SHOP UGA
+ADD YOUR PRODUCTS HERE
+====================================================
+
+To add a product, copy this example:
+
+{
+  id: "7",
+  name: "Tecno Camon 30",
+  category: "Phones",
+  price: 850000,
+  image: "IMAGE_URL_HERE",
+},
+
+Use:
+Phones
+TVs
+Laptops
+
+Price must be written as a number in UGX.
+====================================================
+*/
 
 const PRODUCTS = [
   {
@@ -22,6 +47,7 @@ const PRODUCTS = [
     image:
       "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=700",
   },
+
   {
     id: "2",
     name: "iPhone 15",
@@ -30,6 +56,7 @@ const PRODUCTS = [
     image:
       "https://images.unsplash.com/photo-1591337676887-a217a6970a8a?w=700",
   },
+
   {
     id: "3",
     name: 'Samsung Smart TV 43"',
@@ -38,6 +65,7 @@ const PRODUCTS = [
     image:
       "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=700",
   },
+
   {
     id: "4",
     name: 'LG Smart TV 55"',
@@ -46,6 +74,7 @@ const PRODUCTS = [
     image:
       "https://images.unsplash.com/photo-1593784991095-a205069470b6?w=700",
   },
+
   {
     id: "5",
     name: "HP Laptop 15",
@@ -54,6 +83,7 @@ const PRODUCTS = [
     image:
       "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=700",
   },
+
   {
     id: "6",
     name: "MacBook Air M2",
@@ -62,205 +92,74 @@ const PRODUCTS = [
     image:
       "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=700",
   },
+
+  // ==================================================
+  // ADD NEW PRODUCTS BELOW THIS LINE
+  // ==================================================
+
+  // {
+  //   id: "7",
+  //   name: "Tecno Camon 30",
+  //   category: "Phones",
+  //   price: 850000,
+  //   image: "IMAGE_URL_HERE",
+  // },
+
+  // {
+  //   id: "8",
+  //   name: "HP EliteBook",
+  //   category: "Laptops",
+  //   price: 1800000,
+  //   image: "IMAGE_URL_HERE",
+  // },
 ];
 
-const money = (amount) => `UGX ${amount.toLocaleString()}`;
+const formatPrice = (price) => {
+  return "UGX " + price.toLocaleString();
+};
 
 export default function App() {
-  const [screen, setScreen] = useState("home");
-  const [selectedProduct, setSelectedProduct] = useState(null);
   const [category, setCategory] = useState("All");
   const [search, setSearch] = useState("");
   const [cart, setCart] = useState([]);
 
-  const filteredProducts = useMemo(() => {
-    return PRODUCTS.filter((product) => {
-      const matchesCategory =
-        category === "All" || product.category === category;
+  const filteredProducts = PRODUCTS.filter((product) => {
+    const categoryMatch =
+      category === "All" || product.category === category;
 
-      const matchesSearch = product.name
-        .toLowerCase()
-        .includes(search.toLowerCase());
+    const searchMatch = product.name
+      .toLowerCase()
+      .includes(search.toLowerCase());
 
-      return matchesCategory && matchesSearch;
-    });
-  }, [category, search]);
-
-  const openProduct = (product) => {
-    setSelectedProduct(product);
-    setScreen("product");
-  };
+    return categoryMatch && searchMatch;
+  });
 
   const addToCart = (product) => {
     setCart([...cart, product]);
+
     Alert.alert(
-      "Added to cart",
-      `${product.name} has been added to your cart.`
+      "Added to Cart",
+      product.name + " has been added to your cart."
     );
   };
-
-  if (screen === "product" && selectedProduct) {
-    return (
-      <SafeAreaView style={styles.safe}>
-        <StatusBar style="light" />
-
-        <View style={styles.topBar}>
-          <Pressable onPress={() => setScreen("home")}>
-            <Ionicons name="arrow-back" size={26} color="#fff" />
-          </Pressable>
-
-          <Text style={styles.topTitle}>Product Details</Text>
-
-          <Pressable onPress={() => setScreen("cart")}>
-            <Ionicons name="cart-outline" size={26} color="#fff" />
-          </Pressable>
-        </View>
-
-        <FlatList
-          data={[selectedProduct]}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <View>
-              <Image source={{ uri: item.image }} style={styles.heroImage} />
-
-              <View style={styles.productDetails}>
-                <Text style={styles.categoryLabel}>{item.category}</Text>
-
-                <Text style={styles.heroName}>{item.name}</Text>
-
-                <Text style={styles.heroPrice}>
-                  {money(item.price)}
-                </Text>
-
-                <Text style={styles.description}>
-                  Quality product available from Mobile Shop UGA.
-                  Contact us for availability, delivery and payment
-                  options.
-                </Text>
-
-                <Pressable
-                  style={styles.buyButton}
-                  onPress={() => addToCart(item)}
-                >
-                  <Ionicons
-                    name="cart"
-                    size={21}
-                    color="#fff"
-                  />
-                  <Text style={styles.buyText}>Add to Cart</Text>
-                </Pressable>
-              </View>
-            </View>
-          )}
-        />
-      </SafeAreaView>
-    );
-  }
-
-  if (screen === "cart") {
-    return (
-      <SafeAreaView style={styles.safe}>
-        <StatusBar style="light" />
-
-        <View style={styles.topBar}>
-          <Pressable onPress={() => setScreen("home")}>
-            <Ionicons name="arrow-back" size={26} color="#fff" />
-          </Pressable>
-
-          <Text style={styles.topTitle}>My Cart</Text>
-
-          <View />
-        </View>
-
-        {cart.length === 0 ? (
-          <View style={styles.emptyContainer}>
-            <Ionicons
-              name="cart-outline"
-              size={75}
-              color="#2563eb"
-            />
-
-            <Text style={styles.emptyTitle}>
-              Your cart is empty
-            </Text>
-
-            <Text style={styles.emptyText}>
-              Choose a phone, TV or laptop to start shopping.
-            </Text>
-
-            <Pressable
-              style={styles.buyButton}
-              onPress={() => setScreen("home")}
-            >
-              <Text style={styles.buyText}>
-                Continue Shopping
-              </Text>
-            </Pressable>
-          </View>
-        ) : (
-          <FlatList
-            data={cart}
-            keyExtractor={(_, index) => index.toString()}
-            contentContainerStyle={{ padding: 15 }}
-            renderItem={({ item }) => (
-              <View style={styles.cartItem}>
-                <Image
-                  source={{ uri: item.image }}
-                  style={styles.cartImage}
-                />
-
-                <View style={{ flex: 1 }}>
-                  <Text style={styles.cartName}>
-                    {item.name}
-                  </Text>
-
-                  <Text style={styles.price}>
-                    {money(item.price)}
-                  </Text>
-                </View>
-              </View>
-            )}
-            ListFooterComponent={
-              <Pressable
-                style={styles.buyButton}
-                onPress={() =>
-                  Alert.alert(
-                    "Checkout",
-                    "Payment and delivery integration can be added next."
-                  )
-                }
-              >
-                <Text style={styles.buyText}>
-                  Checkout
-                </Text>
-              </Pressable>
-            }
-          />
-        )}
-      </SafeAreaView>
-    );
-  }
 
   return (
     <SafeAreaView style={styles.safe}>
       <StatusBar style="light" />
 
+      {/* HEADER */}
       <View style={styles.header}>
         <View>
-          <Text style={styles.brand}>Mobile Shop UGA</Text>
-
-          <Text style={styles.sub}>
+          <Text style={styles.logo}>Mobile Shop UGA</Text>
+          <Text style={styles.subtitle}>
             Phones • TVs • Laptops
           </Text>
         </View>
 
-        <Pressable
-          style={styles.cartButton}
-          onPress={() => setScreen("cart")}
-        >
+        <View style={styles.cart}>
           <Ionicons
             name="cart-outline"
-            size={25}
+            size={27}
             color="#fff"
           />
 
@@ -271,20 +170,22 @@ export default function App() {
               </Text>
             </View>
           )}
-        </Pressable>
+        </View>
       </View>
 
+      {/* CONTENT */}
       <FlatList
         data={filteredProducts}
         keyExtractor={(item) => item.id}
         numColumns={2}
         contentContainerStyle={styles.list}
         ListHeaderComponent={
-          <>
-            <Text style={styles.welcome}>
+          <View>
+            <Text style={styles.title}>
               Find your next device
             </Text>
 
+            {/* SEARCH */}
             <View style={styles.searchBox}>
               <Ionicons
                 name="search"
@@ -293,52 +194,49 @@ export default function App() {
               />
 
               <TextInput
-                placeholder="Search phones, TVs, laptops"
+                placeholder="Search products"
                 value={search}
                 onChangeText={setSearch}
                 style={styles.searchInput}
               />
             </View>
 
-            <FlatList
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              data={["All", "Phones", "TVs", "Laptops"]}
-              keyExtractor={(item) => item}
-              renderItem={({ item }) => (
-                <Pressable
-                  onPress={() => setCategory(item)}
-                  style={[
-                    styles.chip,
-                    category === item &&
-                      styles.chipActive,
-                  ]}
-                >
-                  <Text
+            {/* CATEGORIES */}
+            <View style={styles.categories}>
+              {["All", "Phones", "TVs", "Laptops"].map(
+                (item) => (
+                  <Pressable
+                    key={item}
+                    onPress={() => setCategory(item)}
                     style={[
-                      styles.chipText,
+                      styles.categoryButton,
                       category === item &&
-                        styles.chipTextActive,
+                        styles.categoryActive,
                     ]}
                   >
-                    {item}
-                  </Text>
-                </Pressable>
+                    <Text
+                      style={[
+                        styles.categoryText,
+                        category === item &&
+                          styles.categoryTextActive,
+                      ]}
+                    >
+                      {item}
+                    </Text>
+                  </Pressable>
+                )
               )}
-            />
-          </>
+            </View>
+          </View>
         }
         renderItem={({ item }) => (
-          <Pressable
-            style={styles.card}
-            onPress={() => openProduct(item)}
-          >
+          <View style={styles.card}>
             <Image
               source={{ uri: item.image }}
               style={styles.productImage}
             />
 
-            <Text style={styles.categoryLabel}>
+            <Text style={styles.productCategory}>
               {item.category}
             </Text>
 
@@ -350,12 +248,27 @@ export default function App() {
             </Text>
 
             <Text style={styles.price}>
-              {money(item.price)}
+              {formatPrice(item.price)}
             </Text>
-          </Pressable>
+
+            <Pressable
+              style={styles.addButton}
+              onPress={() => addToCart(item)}
+            >
+              <Ionicons
+                name="cart"
+                size={17}
+                color="#fff"
+              />
+
+              <Text style={styles.addText}>
+                Add to Cart
+              </Text>
+            </Pressable>
+          </View>
         )}
         ListEmptyComponent={
-          <Text style={styles.emptyText}>
+          <Text style={styles.noProducts}>
             No products found.
           </Text>
         }
@@ -372,27 +285,27 @@ const styles = StyleSheet.create({
 
   header: {
     backgroundColor: "#0f172a",
-    paddingHorizontal: 18,
-    paddingVertical: 18,
+    padding: 18,
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
+    justifyContent: "space-between",
   },
 
-  brand: {
+  logo: {
     color: "#fff",
     fontSize: 23,
-    fontWeight: "900",
+    fontWeight: "bold",
   },
 
-  sub: {
+  subtitle: {
     color: "#cbd5e1",
     marginTop: 4,
   },
 
-  cartButton: {
+  cart: {
+    position: "relative",
     backgroundColor: "#1e293b",
-    padding: 11,
+    padding: 12,
     borderRadius: 14,
   },
 
@@ -411,199 +324,121 @@ const styles = StyleSheet.create({
   badgeText: {
     color: "#fff",
     fontSize: 11,
-    fontWeight: "900",
+    fontWeight: "bold",
   },
 
   list: {
-    padding: 14,
+    padding: 12,
   },
 
-  welcome: {
+  title: {
     fontSize: 24,
-    fontWeight: "900",
+    fontWeight: "bold",
     color: "#0f172a",
     marginBottom: 12,
   },
 
   searchBox: {
-    height: 50,
     backgroundColor: "#fff",
+    height: 50,
     borderRadius: 14,
-    paddingHorizontal: 13,
+    paddingHorizontal: 14,
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 14,
     borderWidth: 1,
     borderColor: "#e2e8f0",
+    marginBottom: 12,
   },
 
   searchInput: {
     flex: 1,
-    marginLeft: 9,
+    marginLeft: 8,
     fontSize: 15,
   },
 
-  chip: {
-    paddingHorizontal: 17,
-    paddingVertical: 10,
-    borderRadius: 22,
-    backgroundColor: "#e2e8f0",
-    marginRight: 8,
-    marginBottom: 14,
+  categories: {
+    flexDirection: "row",
+    marginBottom: 12,
   },
 
-  chipActive: {
+  categoryButton: {
+    backgroundColor: "#e2e8f0",
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderRadius: 20,
+    marginRight: 7,
+  },
+
+  categoryActive: {
     backgroundColor: "#2563eb",
   },
 
-  chipText: {
+  categoryText: {
     color: "#334155",
-    fontWeight: "800",
+    fontWeight: "bold",
   },
 
-  chipTextActive: {
+  categoryTextActive: {
     color: "#fff",
   },
 
   card: {
-    backgroundColor: "#fff",
-    borderRadius: 17,
-    padding: 9,
-    margin: 5,
     flex: 1,
+    backgroundColor: "#fff",
+    margin: 5,
+    padding: 9,
+    borderRadius: 16,
     elevation: 2,
   },
 
   productImage: {
     width: "100%",
-    height: 145,
+    height: 140,
     borderRadius: 12,
     backgroundColor: "#e2e8f0",
   },
 
-  categoryLabel: {
+  productCategory: {
     color: "#2563eb",
-    fontSize: 12,
-    fontWeight: "900",
-    marginTop: 8,
-    textTransform: "uppercase",
+    fontSize: 11,
+    fontWeight: "bold",
+    marginTop: 7,
   },
 
   productName: {
-    fontSize: 15,
-    fontWeight: "800",
-    marginTop: 3,
     color: "#0f172a",
+    fontSize: 15,
+    fontWeight: "bold",
+    marginTop: 3,
   },
 
   price: {
+    color: "#0f172a",
     fontSize: 15,
-    fontWeight: "900",
+    fontWeight: "bold",
     marginTop: 7,
-    color: "#0f172a",
   },
 
-  topBar: {
-    height: 60,
-    paddingHorizontal: 18,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    backgroundColor: "#0f172a",
-  },
-
-  topTitle: {
-    color: "#fff",
-    fontSize: 19,
-    fontWeight: "900",
-  },
-
-  heroImage: {
-    width: "100%",
-    height: 330,
-    backgroundColor: "#e2e8f0",
-  },
-
-  productDetails: {
-    padding: 18,
-  },
-
-  heroName: {
-    fontSize: 28,
-    fontWeight: "900",
-    marginTop: 5,
-    color: "#0f172a",
-  },
-
-  heroPrice: {
-    fontSize: 22,
-    fontWeight: "900",
-    color: "#2563eb",
-    marginTop: 10,
-  },
-
-  description: {
-    fontSize: 16,
-    lineHeight: 24,
-    color: "#475569",
-    marginVertical: 18,
-  },
-
-  buyButton: {
+  addButton: {
     backgroundColor: "#2563eb",
-    padding: 16,
-    borderRadius: 14,
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "row",
-    gap: 8,
-    marginTop: 10,
-  },
-
-  buyText: {
-    color: "#fff",
-    fontWeight: "900",
-    fontSize: 16,
-  },
-
-  emptyContainer: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 30,
-  },
-
-  emptyTitle: {
-    fontSize: 23,
-    fontWeight: "900",
-    marginTop: 15,
-  },
-
-  emptyText: {
-    textAlign: "center",
-    color: "#64748b",
-    margin: 18,
-    fontSize: 15,
-  },
-
-  cartItem: {
-    backgroundColor: "#fff",
-    borderRadius: 15,
-    padding: 10,
-    marginBottom: 10,
-    flexDirection: "row",
-    gap: 12,
-  },
-
-  cartImage: {
-    width: 80,
-    height: 80,
+    paddingVertical: 10,
     borderRadius: 10,
+    marginTop: 9,
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
   },
 
-  cartName: {
-    fontWeight: "800",
+  addText: {
+    color: "#fff",
+    fontWeight: "bold",
+    marginLeft: 5,
+  },
+
+  noProducts: {
+    textAlign: "center",
+    marginTop: 30,
+    color: "#64748b",
     fontSize: 16,
-    marginTop: 8,
   },
 });
