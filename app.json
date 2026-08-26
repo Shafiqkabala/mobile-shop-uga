@@ -1,0 +1,13 @@
+{
+  "expo": {
+    "name": "Mobile Shop UGA",
+    "slug": "mobile-shop-uga",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "web": {
+      "bundler": "metro",
+      "output": "single"
+    }
+  }
+}
