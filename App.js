@@ -112,8 +112,23 @@ const PRODUCTS = [
   //   price: 1800000,
   //   image: "IMAGE_URL_HERE",
   // },
+  {
+    id: "7",
+    name: "iPhone 11 Pro Max",
+    category: "Phones",
+    price: 950000,
+    image:
+      "https://raw.githubusercontent.com/Shafiqkabala/mobile-shop-uga/main/iphone-11-pro-max.jpg",
+  },
+  {
+    id: "8",
+    name: "Samsung Note 10",
+    category: "Phones",
+    price: 950000,
+    image:
+      "https://raw.githubusercontent.com/Shafiqkabala/mobile-shop-uga/main/samsung-note-10.jpg",
+  },
 ];
-
 const formatPrice = (price) => {
   return "UGX " + price.toLocaleString();
 };
