@@ -18,7 +18,7 @@ import { getFirestore, collection, getDocs } from "firebase/firestore";
 const firebaseConfig = {
   apiKey: "AIzaSyDb6VHt_KvWOH9TY8mxWy7_SZRatxKfntc",
   authDomain: "moble-shop-uga.firebaseapp.com",
-  projectId: "moble-shop-uga",
+  projectId: "mobile-shop-uga",
   storageBucket: "moble-shop-uga.firebasestorage.app",
   messagingSenderId: "1087250782641",
   appId: "1:1087250782641:web:7f216683b61ce25a114590",
