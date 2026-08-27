@@ -8,7 +8,7 @@ import {
   TextInput,
   Pressable,
   SafeAreaView,
-  Alert,
+  Alert,Linking,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
@@ -281,7 +281,62 @@ export default function App() {
               </Text>
             </Pressable>
           </View>
-        )}
+        )}ListFooterComponent={
+  <View style={{ padding: 20, marginTop: 10 }}>
+    <Text style={{ fontSize: 22, fontWeight: "bold", textAlign: "center", marginBottom: 12 }}>
+      Mobile Shop UGA
+    </Text>
+
+    <Text style={{ fontSize: 16, textAlign: "center", marginBottom: 8 }}>
+      📱 Phones • TVs • Laptops
+    </Text>
+
+    <Text style={{ fontSize: 16, textAlign: "center", marginBottom: 8 }}>
+      💰 Payment: MTN Mobile Money • Airtel Money • Cash
+    </Text>
+
+    <Text style={{ fontSize: 16, textAlign: "center", marginBottom: 8 }}>
+      🚚 Delivery available
+    </Text>
+
+    <Text style={{ fontSize: 16, textAlign: "center", marginBottom: 12 }}>
+      🛡️ Warranty available on selected products
+    </Text>
+
+    <Pressable
+      onPress={() =>
+        Linking.openURL(
+          "https://wa.me/256745963382?text=Hello%20Mobile%20Shop%20UGA,%20I%20would%20like%20to%20make%20an%20order."
+        )
+      }
+      style={{
+        backgroundColor: "#25D366",
+        padding: 14,
+        borderRadius: 10,
+        alignItems: "center",
+        marginBottom: 10,
+      }}
+    >
+      <Text style={{ color: "#fff", fontSize: 17, fontWeight: "bold" }}>
+        💬 Order on WhatsApp
+      </Text>
+    </Pressable>
+
+    <Pressable
+      onPress={() => Linking.openURL("tel:+256745963382")}
+      style={{
+        backgroundColor: "#2563eb",
+        padding: 14,
+        borderRadius: 10,
+        alignItems: "center",
+      }}
+    >
+      <Text style={{ color: "#fff", fontSize: 17, fontWeight: "bold" }}>
+        📞 Call Mobile Shop UGA
+      </Text>
+    </Pressable>
+  </View>
+                }
         ListEmptyComponent={
           <Text style={styles.noProducts}>
             No products found.
