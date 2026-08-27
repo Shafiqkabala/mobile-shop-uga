@@ -17,9 +17,9 @@ import { getFirestore, collection, getDocs } from "firebase/firestore";
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyDb6VHt_KvWOH9TY8mxWy7_SZRatxKfntc",
-  authDomain: "moble-shop-uga.firebaseapp.com",
+  authDomain: "mobile-shop-uga.firebaseapp.com",
   projectId: "mobile-shop-uga",
-  storageBucket: "moble-shop-uga.firebasestorage.app",
+  storageBucket: "mobile-shop-uga.firebasestorage.app",
   messagingSenderId: "1087250782641",
   appId: "1:1087250782641:web:7f216683b61ce25a114590",
   measurementId: "G-YVFV3BJT0S"
