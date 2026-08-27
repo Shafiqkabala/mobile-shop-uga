@@ -32,7 +32,7 @@ jobs:
         run: npm install
 
       - name: Build Expo website
-        run: npx expo export --platform web
+        run: npx expo export --platform web --base-url /mobile-shop-uga/
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
