@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -14,6 +14,13 @@ import { Ionicons } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut
+} from "firebase/auth";
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyDb6VHt_KvWOH9TY8mxWy7_SZRatxKfntc",
@@ -25,6 +32,7 @@ const firebaseConfig = {
   measurementId: "G-YVFV3BJT0S"
 };
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 const db = getFirestore(app);
 /*
 ====================================================
@@ -151,7 +159,16 @@ export default function App() {
   const [search, setSearch] = useState("");
   const [cart, setCart] = useState([]);
 const [screen, setScreen] = useState("home");
+  const [email, setEmail] = useState("");
+const [password, setPassword] = useState("");
 const [user, setUser] = useState(null);
+  useEffect(() => {
+  const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    setUser(currentUser);
+  });
+
+  return unsubscribe;
+}, []);
   const filteredProducts = PRODUCTS.filter((product) => {
     const categoryMatch =
       category === "All" || product.category === category;
@@ -171,7 +188,25 @@ const [user, setUser] = useState(null);
       product.name + " has been added to your cart."
     );
   };
+const handleLogin = async (email, password) => {
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    Alert.alert("Success", "You are now logged in!");
+    setScreen("home");
+  } catch (error) {
+    Alert.alert("Login failed", error.message);
+  }
+};
 
+const handleCreateAccount = async (email, password) => {
+  try {
+    await createUserWithEmailAndPassword(auth, email, password);
+    Alert.alert("Success", "Your account has been created!");
+    setScreen("home");
+  } catch (error) {
+    Alert.alert("Account creation failed", error.message);
+  }
+};
   return (
     <SafeAreaView style={styles.safe}>
       <StatusBar style="light" />
