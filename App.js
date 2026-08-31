@@ -150,7 +150,8 @@ export default function App() {
   const [category, setCategory] = useState("All");
   const [search, setSearch] = useState("");
   const [cart, setCart] = useState([]);
-
+const [screen, setScreen] = useState("home");
+const [user, setUser] = useState(null);
   const filteredProducts = PRODUCTS.filter((product) => {
     const categoryMatch =
       category === "All" || product.category === category;
